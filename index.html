@@ -22,6 +22,17 @@
       width: 320px;
       max-width: 90vw;
       position: relative;
+
+      /* Исходное состояние для анимации */
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    /* Класс для запуска анимации */
+    .container.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .logo {
@@ -100,7 +111,7 @@
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container" id="container">
     <img 
       src="https://www.pochta.ru/assets/Logo_Kirillicza_Dvuhstrochnyj_256d5530b1.jpg" 
       alt="Логотип Почты России" 
@@ -131,14 +142,32 @@
   </div>
 
   <script>
+    // Плавное появление контейнера при загрузке
+    window.addEventListener('load', () => {
+      const container = document.getElementById('container');
+      container.classList.add('visible');
+    });
+
     const phoneInput = document.getElementById('phoneInput');
     const form = document.getElementById('phoneForm');
     const errorMessage = document.getElementById('errorMessage');
 
     phoneInput.addEventListener('input', () => {
-      if (!phoneInput.value.startsWith('+7')) {
-        phoneInput.value = '+7' + phoneInput.value.replace(/^\+?7?/, '');
+      // Оставляем только цифры
+      let digits = phoneInput.value.replace(/\D/g, '');
+
+      // Если нет кода "7" в начале — добавляем
+      if (!digits.startsWith('7')) {
+        digits = '7' + digits.replace(/^7*/, '');
       }
+
+      // Ограничиваем максимум 11 цифр (1 код + 10 цифр номера)
+      if (digits.length > 11) {
+        digits = digits.slice(0, 11);
+      }
+
+      // Формируем значение с + впереди
+      phoneInput.value = '+' + digits;
     });
 
     form.addEventListener('submit', e => {
